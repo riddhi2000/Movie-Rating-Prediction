@@ -12,14 +12,6 @@ from sklearn.naive_bayes import GaussianNB
 ###############################################################################
 
 
-# setup progress bar
-toolbar_width = 60
-sys.stdout.write("\n[%s" % (" " * (toolbar_width/3)))
-sys.stdout.write("***Predicting data***")
-sys.stdout.write("%s]" % (" " * (toolbar_width/3)))
-sys.stdout.flush()
-sys.stdout.write("\n")
-
 # initialize variables
 column = []
 data_val = []
@@ -38,6 +30,7 @@ count = 0
 # the algorithms
 encoded_data = encode(data)
 
+
 # convert the float scores to int. Multiplying by 10 helps us keep the decimal
 # level precision which would otherwise be lost in typecasting
 i = 0
@@ -45,9 +38,12 @@ while i < len(label):
     scores.append(int (float(label[i]) * 10))
     i += 1;
 
+print ("Testing Data on various classifier")
+
 # SVM classifier
-#svm_clf = svm.SVC(kernel = 'linear')
-#svm_clf.fit(encoded_data, scores)
+svm_clf = svm.SVC(kernel = 'linear')
+svm_clf.fit(encoded_data, scores)
+
 
 # Gaussian Naive Bayes
 nb_clf = GaussianNB()
@@ -61,6 +57,7 @@ rf_clf.fit(encoded_data, scores)
 dt_clf = tree.DecisionTreeClassifier()
 dt_clf.fit(encoded_data, scores)
 
+print("Model Defined")
 
 
 with open('Dataset/Test.csv') as f:
@@ -110,11 +107,11 @@ with open('Dataset/Test.csv') as f:
 
 # Print the error margin
 
-print("Error margin for Naive Bayes: %0.2f" % (nb_error_margin/count))
+print("Error Rate for Naive Bayes: %0.2f" % (nb_error_margin/count))
 
-print("Error margin for Random Forest: %0.2f" % (rf_error_margin/count))
+print("Error Rate for Decision Tree: %0.2f" % (dt_error_margin/count))
 
-print("Error margin for Decision Tree: %0.2f" % (dt_error_margin/count))
+print("Error Rate for Random Forest: %0.2f" % (rf_error_margin/count))
 
 #print("Error margin for SVM: %0.2f" % (svm_error_margin/count))
 
