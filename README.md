@@ -9,4 +9,10 @@ Type the following command to run the program:
 ```python
 python algorithm.py
 ```
+## Approach
 
+##1.Feature Selection
+
+##2.Applied Various Clustering Algorithm For Prediction
+
+##3.Applied Various Classification Algorithm For Prediction
