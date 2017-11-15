@@ -1,4 +1,5 @@
 #####################################################
+# This script reads the database and performs	    #
 # 3 preprocessing steps:			    #
 # 1. Handle missing data of numerical features	    #
 # 2. Convert categorical to numerical values        #
@@ -17,7 +18,7 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.preprocessing import scale
 
 # Load database
-D_orig = pd.read_csv('Dataset/train1.csv');
+D_orig = pd.read_csv('./Dataset/train1.csv');
 
 D = D_orig
 # Remove features/columns not to be used:
@@ -56,10 +57,12 @@ D = D.join(vec_data)
 
 D = D.dropna()
 
+#---------------------------------------------------------------------------#
+
 # Convert 'colsToVect' categorical features to numerical using one hot encoding
 vec = DictVectorizer()
 colsToVect = ['color','language','country','content_rating']
-vec_data = pd.DataFrame(vec.fit_transform(D[colsToVect].to_dict(outtype='records')).toarray())
+vec_data = pd.DataFrame(vec.fit_transform(D[colsToVect].to_dict(orient='records')).toarray())
 vec_data.columns = vec.get_feature_names()
 vec_data.index = D.index
 D = D.drop(colsToVect, axis=1)

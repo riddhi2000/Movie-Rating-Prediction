@@ -3,14 +3,12 @@ import datetime
 import sys
 
 ###############################################################################
-# Extracts the required data from the given dataset and converts it into
-# the required format
+# Extracts the required data from the given dataset and converts it into the required format
 ###############################################################################
 
 # print the current timestamp
 print("Start time: " + str(datetime.datetime.now()).split('.')[0])
-
-print("Training Dataset")
+print("#########Training Dataset###########")
 
 # initialize variables
 column = []
@@ -18,7 +16,7 @@ data = []
 label = []
 progress = 0
 
-with open('Dataset/Train.csv') as f:
+with open('Dataset/svmtrain.csv') as f:
     reader = csv.DictReader(f) # read rows into a dictionary format
     for row in reader: # read a row as {column1: value1, column2: value2,...}
         column.append(row['movie_title'])

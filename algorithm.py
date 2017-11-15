@@ -2,13 +2,14 @@ import csv
 import datetime
 from extract_data import *
 from word_encoder import *
+from DataPreprocessor import *
 from sklearn import svm
 from sklearn import tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 
 ###############################################################################
-# Runs the various classification algorithms on the test data
+		# Runs the various classification algorithms on the test data
 ###############################################################################
 
 
@@ -25,11 +26,9 @@ nb_error_margin = 0
 svm_error_margin = 0
 count = 0
 
-# send the extracted data available from extract_data to the encode function
-# this function vectorizes the text based data into ASCII format for use by
-# the algorithms
+# send the extracted data available from extract_data to the encode function this function vectorizes the text based 
+# data into ASCII format for use by the algorithms
 encoded_data = encode(data)
-
 
 # convert the float scores to int. Multiplying by 10 helps us keep the decimal
 # level precision which would otherwise be lost in typecasting
@@ -38,6 +37,8 @@ while i < len(label):
     scores.append(int (float(label[i]) * 10))
     i += 1;
 
+
+print("")
 print ("Testing Data on various classifier")
 
 # SVM classifier
@@ -49,18 +50,63 @@ svm_clf.fit(encoded_data, scores)
 nb_clf = GaussianNB()
 nb_clf.fit(encoded_data, scores)
 
-# Random Forest
-rf_clf = RandomForestClassifier(n_estimators=100)
-rf_clf.fit(encoded_data, scores)
-
 # Decision Tree
 dt_clf = tree.DecisionTreeClassifier()
 dt_clf.fit(encoded_data, scores)
 
+
+# Random Forest
+rf_clf = RandomForestClassifier(n_estimators=100)
+rf_clf.fit(encoded_data, scores)
+
+
+print("")
 print("Model Defined")
 
 
-with open('Dataset/Test.csv') as f:
+###############################################################################
+# Gaussian Naive Bayes
+###############################################################################
+
+# nb_clf = GaussianNB()
+# nb_clf.fit(X_train, Y_train)
+
+# print("Runs Naive Bayes Classifier")
+# nb_error = nb_clf.predict (X_test)
+# for i in xrange(1,len(nb_error)):
+# 	nb_error_margin+=abs(float(nb_error[i])-float(Y_test[i]))
+# print("Error Rate for Naive Bayes: %0.2f" % (nb_error_margin/len(Y_test)))       
+
+
+###############################################################################
+# Decision Tree
+###############################################################################
+
+# dt_clf = tree.DecisionTreeClassifier()
+# dt_clf.fit(encoded_data, scores)
+
+# print("Runs Decision Tree Classifier")
+# dt_error = nb_clf.predict (X_test)
+# for i in xrange(1,len(nb_error)):
+# 	dt_error_margin+=abs(float(dt_error[i])-float(Y_test[i]))
+# print("Error Rate for Decision Tree: %0.2f" % (dt_error_margin/len(Y_test)))   
+
+###############################################################################
+# Random Forest
+###############################################################################
+
+# rf_clf = tree.DecisionTreeClassifier()
+# rf_clf.fit(encoded_data, scores)
+
+# print("Runs Decision Tree Classifier")
+# dt_error = rf_clf.predict (X_test)
+# for i in xrange(1,len(nb_error)):
+# 	dt_error_margin+=abs(float(rf_error[i])-float(Y_test[i]))
+# print("Error Rate for Decision Tree: %0.2f" % (rf_error_margin/len(Y_test)))       
+
+
+
+with open('Dataset/svmtest.csv') as f:
     reader = csv.DictReader(f) # read rows into a dictionary format
     for row in reader: # read a row as {column1: value1, column2: value2,...}
         column.append(row['movie_title'])
@@ -90,7 +136,7 @@ with open('Dataset/Test.csv') as f:
         test_data = encode(data_val)
 
         # calculate error margin for SVM
-        #svm_error_margin += abs((svm_clf.predict (test_data)/10.0) - (float(row['imdb_score'])))
+        svm_error_margin += abs((svm_clf.predict (test_data)/10.0) - (float(row['imdb_score'])))
 
         # calculate error margin for Naive Bayes
         nb_error_margin += abs((nb_clf.predict (test_data)/10.0) - (float(row['imdb_score'])))
@@ -107,13 +153,10 @@ with open('Dataset/Test.csv') as f:
 
 # Print the error margin
 
-print("Error Rate for Naive Bayes: %0.2f" % (nb_error_margin/count))
-
+print("Error Rate for Naive Bayes: %0.2f" % (nb_error_margin/count)) 
 print("Error Rate for Decision Tree: %0.2f" % (dt_error_margin/count))
-
 print("Error Rate for Random Forest: %0.2f" % (rf_error_margin/count))
-
-#print("Error margin for SVM: %0.2f" % (svm_error_margin/count))
+print("Error margin for SVM: %0.2f" % (svm_error_margin/count))
 
 #print current timestamp
 print("End time: " + str(datetime.datetime.now()).split('.')[0])
